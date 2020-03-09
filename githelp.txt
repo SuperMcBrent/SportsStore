@@ -1,0 +1,16 @@
+## hoe werken met git
+
+aanpassingen van github binnenhalen
+`git pull`
+
+items die ik aangepast toevoegen aan een commitpakket
+`git add .`
+
+items in een commitpakket bundelen en klaarmaken voor push
+`git commit -m "een kort en bondig bericht over de commit en de inhoud van de changes"`
+
+het commitpakket wegsturen naar github
+`git push`
+
+
+
