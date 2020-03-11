@@ -12,8 +12,4 @@
   <ItemGroup>
     <ProjectReference Include="..\SportsStore.Contracts\SportsStore.Contracts.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Cartline.cs" />
-  </ItemGroup>
 </Project>
