@@ -20,7 +20,7 @@ namespace SportsStore.DAL {
             SqlConnection conn = new SqlConnection(_connStr);
             try {
                 conn.Open();
-                string sql = $"UPDATE cart SET NumberOfItems = '" + cart.NumberOfItems + "', TotalValue ='" + cart.TotalValue + "' WHERE Id = " + cart.Id;
+                string sql = $"UPDATE cart SET OpvulVeld = '" + cart.OpvulVeld + "' WHERE Id = " + cart.Id;
                 SqlCommand updateCommand = new SqlCommand(sql, conn);
                 updateCommand.ExecuteNonQuery();
             } catch (Exception e) {
@@ -39,7 +39,7 @@ namespace SportsStore.DAL {
         /// <returns></returns>
         public int Insert(Contracts.Cart cart) {
             Int32 id = 0;
-            string sql = "INSERT INTO cart ( NumberOfItems, TotalValue ) VALUES ( '" + cart.NumberOfItems + "', '" + cart.TotalValue + "' ); "
+            string sql = "INSERT INTO cart ( OpvulVeld ) VALUES ( '" + cart.OpvulVeld + "' ); "
                 + "SELECT CAST(scope_identity() AS int);";
             // output INSERTED.ID typisch Microsoft SQL Server
             using (SqlConnection conn = new SqlConnection(_connStr)) {
@@ -57,16 +57,14 @@ namespace SportsStore.DAL {
 
         public int Insert(List<Contracts.Cart> carts) {
             Int32 id = 0;
-            string sql = "INSERT INTO cart ( NumberOfItems, TotalValue ) OUTPUT INSERTED.ID VALUES ( @NumberOfItems, @TotalValue )";
+            string sql = "INSERT INTO cart ( OpvulVeld ) OUTPUT INSERTED.ID VALUES ( @OpvulVeld )";
             using (SqlConnection conn = new SqlConnection(_connStr)) {
                 SqlCommand cmd = new SqlCommand(sql, conn);
-                cmd.Parameters.Add("@NumberOfItems", SqlDbType.NVarChar);
-                cmd.Parameters.Add("@TotalValue", System.Data.SqlDbType.NVarChar);
+                cmd.Parameters.Add("@OpvulVeld", SqlDbType.NVarChar);
                 try {
                     conn.Open();
                     foreach (var cart in carts) {
-                        cmd.Parameters["@NumberOfItems"].Value = cart.NumberOfItems;
-                        cmd.Parameters["@TotalValue"].Value = cart.TotalValue;
+                        cmd.Parameters["@OpvulVeld"].Value = cart.OpvulVeld;
                         id = (Int32)cmd.ExecuteScalar();
                         cart.Id = id;
                     }
@@ -103,17 +101,17 @@ namespace SportsStore.DAL {
         /// <param name="cart"></param>
         /// <returns></returns>
         public bool Exists(Contracts.Cart cart) {
-            if (cart.Id <= 0 && string.IsNullOrEmpty(cart.NumberOfItems.ToString())) return false;
+            if (cart.Id <= 0 && string.IsNullOrEmpty(cart.OpvulVeld)) return false;
 
             int count = 0;
             SqlConnection conn = new SqlConnection(_connStr);
             try {
                 conn.Open();
-                string sql = "SELECT Id, NumberOfItems, TotalValue FROM cart WHERE ";
+                string sql = "SELECT Id, OpvulVeld FROM cart WHERE ";
                 if (cart.Id != 0)
                     sql += " Id = " + cart.Id;
-                else if (!string.IsNullOrEmpty(cart.NumberOfItems.ToString()))
-                    sql += " Name = '" + cart.NumberOfItems.ToString() + "'";
+                else if (!string.IsNullOrEmpty(cart.OpvulVeld.ToString()))
+                    sql += " OpvulVeld = '" + cart.OpvulVeld + "'";
                 SqlCommand command = new SqlCommand(sql, conn);
                 SqlDataReader dataReader = command.ExecuteReader();
                 if (dataReader.HasRows) {
@@ -143,18 +141,17 @@ namespace SportsStore.DAL {
             SqlConnection conn = new SqlConnection(_connStr);
             try {
                 conn.Open();
-                string sql = "SELECT Id, Name, PostalCode FROM cart WHERE ";
+                string sql = "SELECT Id, OpvulVeld FROM cart WHERE ";
                 if (cart.Id != 0)
                     sql += " Id = " + cart.Id;
-                else if (!string.IsNullOrEmpty(cart.NumberOfItems.ToString()))
-                    sql += " Name = '" + cart.NumberOfItems.ToString() + "'";
+                else if (!string.IsNullOrEmpty(cart.OpvulVeld))
+                    sql += " OpvulVeld = '" + cart.OpvulVeld + "'";
                 SqlCommand command = new SqlCommand(sql, conn);
                 SqlDataReader dataReader = command.ExecuteReader();
                 if (dataReader.HasRows) {
                     while (dataReader.Read()) {
                         cart.Id = (int)dataReader["Id"];
-                        cart.NumberOfItems = (int)dataReader["NumberOfItems"];
-                        cart.TotalValue = (decimal)dataReader["TotalValue"];
+                        cart.OpvulVeld = (string)dataReader["NumberOfItems"];
                         ++count;
                     }
                     return true;

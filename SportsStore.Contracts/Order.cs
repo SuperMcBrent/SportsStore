@@ -11,6 +11,5 @@ namespace SportsStore.Contracts {
         public int OrderId { get; set; }
         public string ShippingCity { get; set; }
         public string ShippingStreet { get; set; }
-        public decimal Total { get; set; }
     }
 }
